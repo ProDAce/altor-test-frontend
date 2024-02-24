@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CSVLink, CSVDownload } from "react-csv";
 import { IC_pagePrev, IC_pageNext, IC_sortDsc, IC_sortAsc, IC_filter } from "./Icons";
 
 
@@ -107,7 +108,7 @@ function RenderTable({ originalData }) {
                 filter["vehicle_brand"].includes(o["vehicle_brand"]) &&
                 filter["vehicle_cc"].includes(o["vehicle_cc"]) &&
                 ((search.length > 0 && o["username"].includes(String(search)) ||
-                search.length==0))
+                    search.length == 0))
             ) {
                 arr.push(o);
             }
@@ -134,6 +135,82 @@ function RenderTable({ originalData }) {
         setSearch("");
         sliceData();
     }
+
+    const downloadCSV = (v) => {
+        let csvData = [];
+        if (v == 1) {
+            // let k = Object.keys(originalData);
+            csvData.push([
+                "device_brand",
+                "model",
+                "processor",
+                "sdk_int",
+                "username",
+                "vehicle_brand",
+                "vehicle_cc",
+                "vehicle_type",
+                "zone"
+            ])
+
+            for (let i = 0; i < originalData.length; i++) {
+                csvData.push([
+                    originalData[i].device_brand,
+                    originalData[i].model,
+                    originalData[i].processor,
+                    originalData[i].sdk_int,
+                    originalData[i].username,
+                    originalData[i].vehicle_brand,
+                    originalData[i].vehicle_cc,
+                    originalData[i].vehicle_type,
+                    originalData[i].zone,
+                ])
+            }
+        } else if (v == 2) {
+            csvData.push([
+                "username",
+                "zone",
+                "device_brand",
+                "sdk_int",
+                "vehicle_brand",
+                "vehicle_cc"
+            ])
+
+            for (let i = 0; i < data.length; i++) {
+                csvData.push([
+                    data[i].username,
+                    data[i].zone,
+                    data[i].device_brand,
+                    data[i].sdk_int,
+                    data[i].vehicle_brand,
+                    data[i].vehicle_cc
+                ])
+            }
+        } else {
+            csvData.push([
+                "username",
+                "zone",
+                "device_brand",
+                "sdk_int",
+                "vehicle_brand",
+                "vehicle_cc"
+            ])
+
+            for (let i = 0; i < currentData.length; i++) {
+                csvData.push([
+                    currentData[i].username,
+                    currentData[i].zone,
+                    currentData[i].device_brand,
+                    currentData[i].sdk_int,
+                    currentData[i].vehicle_brand,
+                    currentData[i].vehicle_cc
+                ])
+            }
+        }
+        // console.log(csvData);
+        return csvData
+    }
+
+
 
     const renderDropDown = (v) => {
         let r = [];
@@ -273,6 +350,15 @@ function RenderTable({ originalData }) {
                         setPage(e.target.value)
                     }
                 }} />
+            </div>
+            <div className="csv">
+                <CSVLink data={downloadCSV(1)}><button>Download Original Data</button></CSVLink>
+                <CSVLink data={downloadCSV(2)}><button >Download Filtered Data</button></CSVLink>
+                <CSVLink data={downloadCSV(3)}><button >Download current {currentData.length} Data</button></CSVLink>
+                {/* <button onClick={() => downloadCSV(1)}>Download Original Data</button>
+                <button onClick={() => downloadCSV(2)}>Download Filtered Data</button>
+                <button onClick={() => downloadCSV(3)}>Download current {currentData.length} Data</button> */}
+
             </div>
         </>
     );

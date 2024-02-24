@@ -11,4 +11,5 @@ Currently, two official plugins are available:
 
 # To install and run
     npm i
+    npm run build
     npm run preview

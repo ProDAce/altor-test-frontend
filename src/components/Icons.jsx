@@ -2,7 +2,7 @@ import './Icon.css';
 function IC_menu({ color, height = 24, width = 24, onClick }) {
     // const {color} = props;
     return (
-        <svg onClick={onClick} className="ic_menu" xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960" height={height} width={width} fill={color}>
+        <svg onClick={onClick} className="ic_menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height={height} width={width} fill={color}>
             <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
         </svg>
     )
@@ -33,7 +33,7 @@ function IC_sortDsc({ color, onClick, height = 24, width = 24 }) {
 function IC_sortAsc({ color, onClick, height = 24, width = 24 }) {
     // const {color} = props;
     return (
-        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960" height={height} width={width}><path d="m296-345-56-56 240-240 240 240-56 56-184-184-184 184Z" /></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height={height} width={width}><path d="m296-345-56-56 240-240 240 240-56 56-184-184-184 184Z" /></svg>
     )
 }
 function IC_pageNext({ color, onClick, height = 24, width = 24 }) {
@@ -48,5 +48,11 @@ function IC_pagePrev({ color, onClick, height = 24, width = 24 }) {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height={height} width={width}><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" /></svg>
     )
 }
+function IC_add({ color, onClick, height = 24, width = 24 }) {
+    // const {color} = props;
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" fill={color} viewBox="0 -960 960 960" onClick={onClick} height={height} width={width} ><path fill={color} d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg>
+    )
+}
 
-export { IC_menu, IC_sort, IC_filter, IC_sortAsc, IC_sortDsc, IC_pageNext, IC_pagePrev }
+export { IC_menu, IC_sort, IC_filter, IC_sortAsc, IC_sortDsc, IC_pageNext, IC_pagePrev, IC_add }

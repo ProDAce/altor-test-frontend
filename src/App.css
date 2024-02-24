@@ -191,6 +191,20 @@ input::-webkit-inner-spin-button {
   -moz-appearance: textfield;
 }
 
+.csv{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.csv button{
+  height: 24px;
+  width: 170px;
+  background-color: var(--color-secondary);
+  border-radius: 4px;
+  margin: 4px 0px;
+}
+
 
 /* #===================================CHARTS=============================================# */
 .pie-chart-div,
@@ -368,6 +382,11 @@ input::-webkit-inner-spin-button {
 
   .side-nav-open {
     width: 200px;
+  }
+
+  .side-nav .add{
+    margin-top: auto;
+    background-color: azure;
   }
 
   .drawer-background-canvas {
