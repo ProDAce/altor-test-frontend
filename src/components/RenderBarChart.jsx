@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts';
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#fe0000"];
-const COLORS_INV = ["#FE7600", "#C40025", "#286CFF", "#42C1FF", "#D4D884", "#00FEFE"];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#fe0000", "#8b0857", "#088b1e", "#D4D884"];
+const COLORS_INV = ["#FE7600", "#C40025", "#286CFF", "#42C1FF", "#D4D884", "#00FEFE", "#8B0875", "#8B0875", "#8884D8"];
 
 
-export default function RenderBarChart({ data, colorIndx = 5, dataKey, stack = false, title="" }) {
+export default function RenderBarChart({ data, colorIndx = 5, dataKey, stack = false, title = "" }) {
 
     // bars.push(<Bar key={""} dataKey={arr[i]} fill={colors[i]} activeBar={<Rectangle fill={colorsInv[i]} stroke={colors[i]} />} />)
 
@@ -32,7 +32,6 @@ export default function RenderBarChart({ data, colorIndx = 5, dataKey, stack = f
         <>
             {/* <div className='c1'> */}
             {/* <ResponsiveContainer width="100%" height="100%"> */}
-            <div className="chart-title" >{title}</div>
             <BarChart
                 width={500}
                 height={500}
@@ -47,10 +46,8 @@ export default function RenderBarChart({ data, colorIndx = 5, dataKey, stack = f
             >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey={dataKey.x}>
-                    {/* <Label value="Zones" offset={0} position="insideBottom" /> */}
                 </XAxis>
                 <YAxis />
-                {/* <YAxis label={{ value: ylabel, angle: -90, position: 'insideLeft' }} /> */}
                 <Tooltip />
                 <Legend />
                 {stack ?

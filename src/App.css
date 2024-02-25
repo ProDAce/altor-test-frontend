@@ -44,12 +44,37 @@
   cursor: pointer;
 }
 
+.side-nav .add {
+  width: fit-content;
+  margin: 0px auto;
+  margin-top: 8px;
+  border-radius: 50%;
+  border: 2px solid var(--color-secondary);
+  padding: 4px;
+  /* background-color: azure; */
+}
+
 .side-nav .zones button:hover {}
 
 .side-nav .zones .active {
   /* background-color: #4ab7a8; */
   background-color: var(--color-secondary);
   color: var(--color-primary);
+}
+
+.dialog {
+  position: absolute;
+  top: calc(50% - 150px);
+  right: calc(50% - 150px);
+  width: 300px;
+  height: 300px;
+  background-color: blueviolet;
+}
+
+.dialog .row{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
 main {
@@ -91,7 +116,8 @@ section {
 .search {
   margin-bottom: 4px;
 }
-.search button{
+
+.search button {
   background-color: var(--color-secondary);
 }
 
@@ -142,21 +168,22 @@ thead tr th .th-div {
   z-index: 1;
 }
 
-.dropdown ul{
+.dropdown ul {
   list-style-type: none;
 }
 
-.dropdown ul li{
+.dropdown ul li {
   display: flex;
   margin: 6px 8px;
   align-items: center;
 }
-.dropdown ul li:hover{
+
+.dropdown ul li:hover {
   background-color: var(--color-secondary);
   cursor: pointer;
 }
 
-.d-open{
+.d-open {
   display: flex;
 }
 
@@ -191,13 +218,13 @@ input::-webkit-inner-spin-button {
   -moz-appearance: textfield;
 }
 
-.csv{
+.csv {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.csv button{
+.csv button {
   height: 24px;
   width: 170px;
   background-color: var(--color-secondary);
@@ -384,10 +411,10 @@ input::-webkit-inner-spin-button {
     width: 200px;
   }
 
-  .side-nav .add{
+  /* .side-nav .add {
     margin-top: auto;
     background-color: azure;
-  }
+  } */
 
   .drawer-background-canvas {
     height: 100vh;

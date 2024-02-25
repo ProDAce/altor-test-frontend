@@ -1,10 +1,11 @@
 import React from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 
-export default function RenderPieChatrs({ data, dataKey, title="" }) {
+export default function RenderPieChatrs({ data, dataKey, title = "" }) {
 
-    const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#fe0000"];
-    const COLORS_INV = ["#FE7600", "#C40025", "#286CFF", "#42C1FF", "#D4D884", "#00FEFE"];
+    const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#fe0000", "#8b0857", "#088b1e", "#D4D884", "#000000", "#dfa9ce", "#25085e", "#5e3a0d"];
+    const COLORS_INV = ["#FE7600", "#C40025", "#286CFF", "#42C1FF", "#D4D884", "#00FEFE", "#8B0875", "#8B0875", "#8884D8", "#808080", "#A9DFBA", "#415E08", "#0D315E"];
+
 
     const RADIAN = Math.PI / 180;
     const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
@@ -19,8 +20,8 @@ export default function RenderPieChatrs({ data, dataKey, title="" }) {
         );
     };
 
-    const renderLabel = ({percent,index }) => {
-        return data[index].name +"["+ String((percent * 100).toFixed(0)) +"%]";
+    const renderLabel = ({ percent, index }) => {
+        return data[index].name + "[" + String((percent * 100).toFixed(0)) + "%]";
     }
 
     return (

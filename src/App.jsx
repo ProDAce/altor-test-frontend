@@ -1,48 +1,32 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react';
 import './App.css'
 
 import res from './assets/data.json';
 import RenderTable from './components/RenderTable.jsx';
 import RenderBarChart from './components/RenderBarChart.jsx';
 import RenderPieChatrs from './components/RenderPieChatrs.jsx';
-import { IC_menu } from './components/Icons.jsx';
-
+import { IC_menu, IC_add } from './components/Icons.jsx';
 
 import AppService from '../service/app-service.js'
 
-
-// import { Chart } from "react-google-charts";
-// import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
 function App() {
-
-  // const colors = ["#72cec1", "#ffc7e4", "#8884d8", "#ffeb5c", "#fead52", "#3db4ec", "#ff8671"]
-  // const colorsInv = ["#8d313e", "#00381b", "#777b27", "#0014a3", "#0152ad", "#c24b13", "#00798e"]
-  // const [vehicles, setVehicles] = useState([]);
-  // const [vehiclesKeys, setVehiclesKeys] = useState([]);
-
-  // const [devices, setDevices] = useState([]);
-  // const [devicesKeys, setDevicesKeys] = useState([]);
 
   const [zones, setZones] = useState([]);
   const [currentZone, setCurrentZone] = useState("All");
   const [data, setData] = useState([]);
   const [chartData, setChartData] = useState({});
   const [stackChartData, setStackChartData] = useState({});
-  const [currentData, setCurrentData] = useState({});
   const [menu, setMenu] = useState(false);
 
 
   useEffect(() => {
 
-    // setData(res.data)
-    AppService.getAllData().then(response => {
-      setData(response.data.result)
-    }).catch(error => {
-      console.error(error)
-    })
+    setData(res.data)
+    // AppService.getAllData().then(response => {
+    //   setData(response.data.result)
+    // }).catch(error => {
+    //   console.error(error)
+    // })
   }, [])
 
   useEffect(() => {
@@ -98,7 +82,6 @@ function App() {
 
       // Data manupulation for charts
       const z = Object.keys(tempData).sort()
-      console.log(tempData);
       setZones(["All", ...z]);
 
       let vcc = [];
@@ -115,66 +98,81 @@ function App() {
           ...tempData[ob].handset_sdk
         })
 
-        temp = Object.keys(tempData[ob].vehicle_brand).sort().map(m => { return { "name": m, "total_vehicles": tempData[ob].vehicle_brand[m] } })
-        tempData[ob].vehicle_brand = temp;
+        tempData[ob].vehicle_brand = sortData(tempData[ob].vehicle_brand, "name", "total_vehicles")
+        tempData[ob].device_brand = sortData(tempData[ob].device_brand, "name", "total_devices")
+        tempData[ob].vehicle_cc = sortData(tempData[ob].vehicle_cc, "name", "total_vehicles")
+        tempData[ob].handset_sdk = sortData(tempData[ob].handset_sdk, "sdk_int", "total_devices")
 
-        temp = Object.keys(tempData[ob].device_brand).sort().map(m => { return { "name": m, "total_devices": tempData[ob].device_brand[m] } })
-        tempData[ob].device_brand = temp;
+        // temp = Object.keys(tempData[ob].vehicle_brand).sort().map(m => { return { "name": m, "total_vehicles": tempData[ob].vehicle_brand[m] } })
+        // tempData[ob].vehicle_brand = temp;
 
-        temp = Object.keys(tempData[ob].vehicle_cc).sort().map(m => { return { "name": m, "total_vehicles": tempData[ob].vehicle_cc[m] } })
-        tempData[ob].vehicle_cc = temp;
+        // temp = Object.keys(tempData[ob].device_brand).sort().map(m => { return { "name": m, "total_devices": tempData[ob].device_brand[m] } })
+        // tempData[ob].device_brand = temp;
 
-        temp = Object.keys(tempData[ob].handset_sdk).sort().map(m => { return { "sdk_int": m, "total_devices": tempData[ob].handset_sdk[m] } })
-        tempData[ob].handset_sdk = temp;
+        // temp = Object.keys(tempData[ob].vehicle_cc).sort().map(m => { return { "name": m, "total_vehicles": tempData[ob].vehicle_cc[m] } })
+        // tempData[ob].vehicle_cc = temp;
+
+        // temp = Object.keys(tempData[ob].handset_sdk).sort().map(m => { return { "sdk_int": m, "total_devices": tempData[ob].handset_sdk[m] } })
+        // tempData[ob].handset_sdk = temp;
       })
+      console.log(tempData);
       setChartData(tempData)
       setStackChartData({
         vcc: vcc,
         sdk: sdkInt
       });
-
     }
-
   }, [data])
 
+  function sortData(d, s1, s2) {
+    let temp = [];
+    // temp = Object.keys(tempData[ob].vehicle_brand).sort().map(m => { return { "name": m, "total_vehicles": tempData[ob].vehicle_brand[m] } })
+    let k = Object.keys(d)
 
-  // useEffect(() => {
-
-  // }, [zones])
+    let other = ""
+    k.forEach(f => {
+      if (f.toLowerCase() != "other" && f.toLowerCase() != "others" && f.toLowerCase() != "not applicable") {
+        temp.push({ [s1]: f, [s2]: d[f] })
+      } else {
+        other = f;
+      }
+    })
+    if (other.length) {
+      temp.push({ [s1]: other, [s2]: d[other] })
+    }
+    return temp;
+  }
 
   function renderChartsOfZones() {
     if (Object.keys(chartData).length && zones.length) {
-      console.log(zones.slice(1));
       return Object.keys(zones).slice(1).map((z, index) => {
         let k = zones[z];
 
         if (currentZone == "All" || currentZone == k) {
           return (
-            <>
-              <section>
-                <div className="section-title">{k} charts</div>
-                <div className="pie-chart-div">
-                  <div className="pie-chart-wrapper">
-                    <RenderPieChatrs key={k} data={chartData[k]?.device_brand} dataKey="total_devices" title="Device Brand distribution" />
-                  </div>
-                  <div className="pie-chart-wrapper">
-                    <RenderPieChatrs key={k} data={chartData[k]?.vehicle_brand} dataKey="total_vehicles" title="Vehicle Brand distribution" />
-                  </div>
-                  <div className="pie-chart-wrapper">
-                    <RenderPieChatrs key={k} data={chartData[k]?.vehicle_cc} dataKey="total_vehicles" title="Vehicle CC distribution" />
-                  </div>
+            <section key={index}>
+              <div className="section-title">{k} charts</div>
+              <div className="pie-chart-div">
+                <div className="pie-chart-wrapper">
+                  <RenderPieChatrs key={k} data={chartData[k]?.device_brand} dataKey="total_devices" title="Device Brand distribution" />
                 </div>
+                <div className="pie-chart-wrapper">
+                  <RenderPieChatrs key={k} data={chartData[k]?.vehicle_brand} dataKey="total_vehicles" title="Vehicle Brand distribution" />
+                </div>
+                <div className="pie-chart-wrapper">
+                  <RenderPieChatrs key={k} data={chartData[k]?.vehicle_cc} dataKey="total_vehicles" title="Vehicle CC distribution" />
+                </div>
+              </div>
 
-                <div className="bar-chart-div">
-                  <div className="bar-chart-wrapper">
-                    <RenderBarChart data={chartData[k]?.vehicle_brand} dataKey={{ x: "name", y: "total_vehicles" }} title="Vehicle Brand distribution" colorIndx={index} />
-                  </div>
-                  <div className="bar-chart-wrapper">
-                    <RenderBarChart data={chartData[k]?.handset_sdk} dataKey={{ x: "sdk_int", y: "total_devices" }} title="Handset Device SDK distribution" colorIndx={index} />
-                  </div>
+              <div className="bar-chart-div">
+                <div className="bar-chart-wrapper">
+                  <RenderBarChart data={chartData[k]?.vehicle_brand} dataKey={{ x: "name", y: "total_vehicles" }} title="Vehicle Brand distribution" colorIndx={index} />
                 </div>
-              </section>
-            </>
+                <div className="bar-chart-wrapper">
+                  <RenderBarChart data={chartData[k]?.handset_sdk} dataKey={{ x: "sdk_int", y: "total_devices" }} title="Handset Device SDK distribution" colorIndx={index} />
+                </div>
+              </div>
+            </section>
           )
         } else {
           return <></>
@@ -182,97 +180,6 @@ function App() {
       })
     }
   }
-  // function renderChartsOfZones() {
-  //   console.log(chartData);
-  //   if (Object.keys(chartData).length) {
-  //     if (currentZone === "All") {
-  //       return zones.slice(1).map((obj, index) => {
-  //         return (
-  //           <div className="chart-zone" key={obj}>
-  //             <h2 style={{ marginTop: "16px", marginBottom: "8px" }}>{obj}</h2>
-  //             <div className="charts">
-  //               <div className="chart-container">
-  //                 <div className="title">Device Brand distribution</div>
-  //                 <div className="chart-c">
-  //                   <RenderPieChatrs data={chartData[obj]?.device_brand} dataKey="total_devices" />
-  //                 </div>
-  //               </div>
-  //               <div className="chart-container">
-  //                 <div className="title">Vehicle Brand distribution</div>
-  //                 <div className="chart-c">
-  //                   <RenderPieChatrs data={chartData[obj]?.vehicle_brand} dataKey="total_vehicles" />
-  //                 </div>
-  //               </div>
-  //               <div className="chart-container">
-  //                 <div className="title">Vehicle CC distribution</div>
-  //                 <div className="chart-c">
-  //                   <RenderPieChatrs data={chartData[obj]?.vehicle_cc} dataKey="total_vehicles" />
-  //                 </div>
-  //               </div>
-  //             </div>
-  //             <div className="charts">
-  //               <div className="chart-container">
-  //                 <div className="title">Vehicle Brand distribution</div>
-  //                 <div className="chart">
-  //                   <RenderBarChart data={chartData[obj]?.vehicle_brand} dataKey={{ x: "name", y: "total_vehicles" }} />
-  //                 </div>
-  //               </div>
-  //               <div className="chart-container">
-  //                 <div className="title">Handset Device SDK distribution</div>
-  //                 <div className="chart">
-  //                   <RenderBarChart data={chartData[obj]?.handset_sdk} dataKey={{ x: "sdk_int", y: "total_devices" }} />
-  //                 </div>
-  //               </div>
-  //             </div>
-  //           </div>
-  //         );
-  //       })
-  //     } else if(currentZone in chartData) {
-  //       return (
-  //         <div className="chart-zone">
-  //           <h2 style={{ marginTop: "16px", marginBottom: "8px" }}>{currentZone}</h2>
-  //           <div className="charts">
-  //             <div className="chart-container">
-  //               <div className="title">Device Brand distribution</div>
-  //               <div className="chart-c">
-  //                 <RenderPieChatrs data={chartData[currentZone]?.device_brand} dataKey="total_devices" />
-  //               </div>
-  //             </div>
-  //             <div className="chart-container">
-  //               <div className="title">Vehicle Brand distribution</div>
-  //               <div className="chart-c">
-  //                 <RenderPieChatrs data={chartData[currentZone]?.vehicle_brand} dataKey="total_vehicles" />
-  //               </div>
-  //             </div>
-  //             <div className="chart-container">
-  //               <div className="title">Vehicle CC distribution</div>
-  //               <div className="chart-c">
-  //                 <RenderPieChatrs data={chartData[currentZone]?.vehicle_cc} dataKey="total_vehicles" />
-  //               </div>
-  //             </div>
-  //           </div>
-  //           <div className="charts">
-  //             <div className="chart-container">
-  //               <div className="title">Vehicle Brand distribution</div>
-  //               <div className="chart">
-  //                 <RenderBarChart data={chartData[currentZone]?.vehicle_brand} dataKey={{ x: "name", y: "total_vehicles" }} />
-  //               </div>
-  //             </div>
-  //             <div className="chart-container">
-  //               <div className="title">Handset Device SDK distribution</div>
-  //               <div className="chart">
-  //                 <RenderBarChart data={chartData[currentZone]?.handset_sdk} dataKey={{ x: "sdk_int", y: "total_devices" }} />
-  //               </div>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       )
-  //     } else{
-  //       return <div>Something went wrong...</div>
-  //     }
-  //   }
-
-  // }
 
   function renderStackChart() {
     return (
@@ -325,6 +232,9 @@ function App() {
           <div className="zones">
             {renderZones()}
           </div>
+          {/* <div className="add">
+            <IC_add color="aquamarine" width={36} height={36} />
+          </div> */}
         </div>
         <div className="toolbar"> <IC_menu width="48px" height="48px" color="#fff" onClick={() => setMenu(true)} /></div>
         <main>
@@ -334,6 +244,7 @@ function App() {
           {renderChartsOfZones()}
           {renderStackChart()}
         </main>
+        
         <div className={"drawer-background-canvas" + (menu ? " background-canvas-on" : " background-canvas-close")} onClick={() => setMenu(false)}></div>
       </div>
     </>

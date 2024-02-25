@@ -67,8 +67,6 @@ function RenderTable({ originalData }) {
         if (page > 0) {
             const l = data.length;
             const idx = (page - 1) * items;
-            // let lastIndex = 
-            console.log("ORI 4 ", data);
             setCurrentData(data.slice(idx, idx + items))
         } else {
             setPage(1)
@@ -93,12 +91,7 @@ function RenderTable({ originalData }) {
     }
 
     const sliceData = (s = false) => {
-
-        // if (ser.length > 0) {
-
-        // }
         let arr = []
-        console.log(search);
         for (let i = 0; i < originalData.length; i++) {
             let o = originalData[i];
             if (
@@ -121,7 +114,6 @@ function RenderTable({ originalData }) {
 
     const handleFilter = (e, field, v) => {
         let f = filter[field];
-        console.log("EEE", e);
         if (e) {
             f.push(v)
             setFilter({ ...filter, [field]: f })
@@ -206,7 +198,6 @@ function RenderTable({ originalData }) {
                 ])
             }
         }
-        // console.log(csvData);
         return csvData
     }
 
@@ -217,9 +208,8 @@ function RenderTable({ originalData }) {
         if (v in filterList) {
             filterList[v].forEach(obj => {
                 r.push(
-                    <li >
-                        {/* {console.log(filter[v])} */}
-                        <input id={`${v} + ${obj}`} type="checkbox" checked={filter[v].includes(obj)} onClick={(e) => {
+                    <li key={obj}>
+                        <input id={`${v} + ${obj}`} type="checkbox" checked={filter[v].includes(obj)} onChange={(e) => {
                             setOpenFilter("")
                             handleFilter(e.target.checked, v, obj)
                         }} /><label htmlFor={`${v} + ${obj}`}>{obj}</label>
@@ -355,10 +345,6 @@ function RenderTable({ originalData }) {
                 <CSVLink data={downloadCSV(1)}><button>Download Original Data</button></CSVLink>
                 <CSVLink data={downloadCSV(2)}><button >Download Filtered Data</button></CSVLink>
                 <CSVLink data={downloadCSV(3)}><button >Download current {currentData.length} Data</button></CSVLink>
-                {/* <button onClick={() => downloadCSV(1)}>Download Original Data</button>
-                <button onClick={() => downloadCSV(2)}>Download Filtered Data</button>
-                <button onClick={() => downloadCSV(3)}>Download current {currentData.length} Data</button> */}
-
             </div>
         </>
     );
