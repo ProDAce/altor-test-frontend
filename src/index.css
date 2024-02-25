@@ -87,6 +87,7 @@ html {
 
 :root {
   --color-primary: #1C1856;
+  --color-primary-light: #4b4968;
   --color-secondary: aquamarine;
   --color-secondary-light: #edfdf7;
   --color-border: rgb(182, 182, 182);

@@ -71,7 +71,7 @@
   background-color: blueviolet;
 }
 
-.dialog .row{
+.dialog .row {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -86,6 +86,24 @@ main {
   border-radius: 8px;
   overflow: hidden;
   overflow-y: scroll;
+}
+
+main::-webkit-scrollbar {
+  width: 10px;
+}
+
+main::-webkit-scrollbar-track {
+  /* background: var(--color-primary-light); */
+  background: rgb(118, 131, 160);
+}
+
+main::-webkit-scrollbar-thumb {
+  background: rgb(74, 22, 122);
+  border-radius: 5px;
+}
+
+main::-webkit-scrollbar-thumb:hover {
+  background: rgb(114, 34, 189);
 }
 
 section {
