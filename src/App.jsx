@@ -144,6 +144,9 @@ function App() {
       if (f.toLowerCase() != "other" && f.toLowerCase() != "others" && f.toLowerCase() != "not applicable") {
         temp.push({ [s1]: f, [s2]: d[f] })
       } else {
+        if(f.toLowerCase() === "other" || f.toLowerCase() === "others"){
+          f="Others";
+        }
         otherFlag = f;
       }
       total += d[f]
