@@ -5,9 +5,10 @@ import res from './assets/data.json';
 import RenderTable from './components/RenderTable.jsx';
 import RenderBarChart from './components/RenderBarChart.jsx';
 import RenderPieChatrs from './components/RenderPieChatrs.jsx';
-import { IC_menu, IC_add } from './components/Icons.jsx';
+import { IC_menu, IC_add, IC_sun, IC_moon } from './components/Icons.jsx';
 
 import AppService from '../service/app-service.js'
+import ReactSwitch from 'react-switch';
 
 export const ThemeContext = createContext(null);
 
@@ -273,6 +274,11 @@ function App() {
         <h3>Data Visualization Dashboard</h3>
         <div className="zones">
           {renderZones()}
+          <div className="switch-div">
+            <label htmlFor="switch">Dark Mode: </label>
+            <ReactSwitch id="switch" className="switch" onChange={toggleTheme} checked={theme === "dark"} checkedIcon={<IC_moon />} uncheckedIcon={<IC_sun color="yellow" />} offColor="#1C1856" onColor="#1C232D" />
+
+          </div>
         </div>
         {/* <div className="add">
             <IC_add color="aquamarine" width={36} height={36} />
