@@ -29,12 +29,12 @@ function App() {
 
   useEffect(() => {
 
-    setData(res.data)
-    // AppService.getAllData().then(response => {
-    //   setData(response.data.result)
-    // }).catch(error => {
-    //   console.error(error)
-    // })
+    // setData(res.data)
+    AppService.getAllData().then(response => {
+      setData(response.data.result)
+    }).catch(error => {
+      console.error(error)
+    })
   }, [])
 
   useEffect(() => {
