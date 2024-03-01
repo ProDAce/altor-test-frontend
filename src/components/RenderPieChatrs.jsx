@@ -3,7 +3,8 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 
 export default function RenderPieChatrs({ data, dataKey, title = "" }) {
 
-    const COLORS = ["#FF7262", "#69a3d0", "#a4d256", "#ba71b6", "#ffae52","#ffeb5c","#b4aed4","#fec6e3","#72cec1"];
+    const COLORS = ["#FF7262", "#69a3d0", "#a4d256", "#ba71b6", "#ffae52","#915a16","#8675df","#e361a4","#72cec1"];
+    // const COLORS = ["#FF7262", "#69a3d0", "#a4d256", "#ba71b6", "#ffae52","#ffeb5c","#b4aed4","#fec6e3","#72cec1"];
     const COLORS_INV = ["#FE7600", "#C40025", "#286CFF", "#42C1FF", "#D4D884", "#00FEFE", "#8B0875", "#8B0875", "#8884D8", "#808080", "#A9DFBA", "#415E08", "#0D315E"];
     // const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#fe0000", "#8b0857", "#088b1e", "#D4D884", "#000000", "#dfa9ce", "#25085e", "#5e3a0d"];
     // const COLORS_INV = ["#FE7600", "#C40025", "#286CFF", "#42C1FF", "#D4D884", "#00FEFE", "#8B0875", "#8B0875", "#8884D8", "#808080", "#A9DFBA", "#415E08", "#0D315E"];

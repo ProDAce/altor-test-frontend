@@ -179,7 +179,7 @@ function App() {
           temp.push({ [s1]: f, [s2]: d[f] })
         }
       })
-      temp.push({ [s1]: "Other", [s2]: otherTotal })
+      temp.push({ [s1]: "Others", [s2]: otherTotal })
       console.log(temp);
 
     }

@@ -21,7 +21,7 @@ function IC_sort({ color = "currentcolor", onClick, height = 24, width = 24 }) {
 function IC_filter({ color = "currentcolor", onClick, height = 24, width = 24 }) {
     // const {color} = props;
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height={height} width={width} fill={color} onClick={onClick}><path d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z" /></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height={height} width={width} fill={color} onClick={onClick} style={{cursor:"pointer"}}><path d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z" /></svg>
     )
 }
 function IC_sortDsc({ color = "currentcolor", onClick, height = 24, width = 24 }) {
