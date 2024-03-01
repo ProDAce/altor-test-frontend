@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext } from 'react';
 import './App.css'
 
 import res from './assets/data.json';
@@ -9,8 +9,11 @@ import { IC_menu, IC_add } from './components/Icons.jsx';
 
 import AppService from '../service/app-service.js'
 
+export const ThemeContext = createContext(null);
+
 function App() {
 
+  const [theme, setTheme] = useState("light");
   const [zones, setZones] = useState([]);
   const [currentZone, setCurrentZone] = useState("All");
   const [data, setData] = useState([]);
@@ -18,15 +21,19 @@ function App() {
   const [stackChartData, setStackChartData] = useState({});
   const [menu, setMenu] = useState(false);
 
+  const toggleTheme = () => {
+    setTheme((current) => (current === "light" ? "dark" : "light"))
+  }
+
 
   useEffect(() => {
 
-    // setData(res.data)
-    AppService.getAllData().then(response => {
-      setData(response.data.result)
-    }).catch(error => {
-      console.error(error)
-    })
+    setData(res.data)
+    // AppService.getAllData().then(response => {
+    //   setData(response.data.result)
+    // }).catch(error => {
+    //   console.error(error)
+    // })
   }, [])
 
   useEffect(() => {
@@ -129,16 +136,51 @@ function App() {
     // temp = Object.keys(tempData[ob].vehicle_brand).sort().map(m => { return { "name": m, "total_vehicles": tempData[ob].vehicle_brand[m] } })
     let k = Object.keys(d)
 
-    let other = ""
+    let otherFlag = "";
+    let otherTotal = 0;
+    let total = 0;
     k.forEach(f => {
       if (f.toLowerCase() != "other" && f.toLowerCase() != "others" && f.toLowerCase() != "not applicable") {
         temp.push({ [s1]: f, [s2]: d[f] })
       } else {
-        other = f;
+        otherFlag = f;
       }
+      total += d[f]
     })
-    if (other.length) {
-      temp.push({ [s1]: other, [s2]: d[other] })
+
+    let j = [];
+    if (k.length > 9) {
+      let keysSorted = k.sort(function (a, b) { return d[a] - d[b] })
+      let min = d[keysSorted[0]]
+      for (let i = 0; i < keysSorted.length; i++) {
+        if (d[keysSorted[i]] > min && keysSorted.length - (i + 1) < 9) {
+          // j = i-1;
+          break;
+        } else {
+          j.push(keysSorted[i])
+          otherTotal += d[keysSorted[i]];
+
+        }
+      }
+      // console.log(d);
+      // console.log(keysSorted);
+      // console.log(j);
+      // console.log(otherTotal);
+      // console.log(total);
+    }
+    if (otherFlag.length) {
+      temp.push({ [s1]: otherFlag, [s2]: d[otherFlag] })
+    }
+    if (k.length > 9 && otherTotal) {
+      temp = [];
+      k.forEach(f => {
+        if (!j.includes(f)) {
+          temp.push({ [s1]: f, [s2]: d[f] })
+        }
+      })
+      temp.push({ [s1]: "Other", [s2]: otherTotal })
+      console.log(temp);
+
     }
     return temp;
   }
@@ -151,7 +193,8 @@ function App() {
         if (currentZone == "All" || currentZone == k) {
           return (
             <section key={index}>
-              <div className="section-title">{k} charts</div>
+              <h2>{k.substring(0, 4)} {index + 1}</h2>
+              {/* <div className="section-title">{k} charts</div> */}
               <div className="pie-chart-div">
                 <div className="pie-chart-wrapper">
                   <RenderPieChatrs key={k} data={chartData[k]?.device_brand} dataKey="total_devices" title="Device Brand distribution" />
@@ -184,7 +227,7 @@ function App() {
   function renderStackChart() {
     return (
       <section>
-        <div className="section-title">Stacked bar chart</div>
+        <h2>Stacked bar chart</h2>
         <div className="bar-stackchart-div">
           <div className="bar-chart-wrapper">
             <RenderBarChart data={stackChartData.vcc} dataKey={{ x: "_zone", y: "" }} stack={true} title="Vehicle CC distribution" />
@@ -225,29 +268,27 @@ function App() {
 
 
   return (
-    <>
-      <div className="container">
-        <div className={"side-nav" + (menu ? " side-nav-open" : " side-nav-close")}>
-          <h3>Data Visualization Dashboard</h3>
-          <div className="zones">
-            {renderZones()}
-          </div>
-          {/* <div className="add">
+    <div id={theme} className="container">
+      <div className={"side-nav" + (menu ? " side-nav-open" : " side-nav-close")}>
+        <h3>Data Visualization Dashboard</h3>
+        <div className="zones">
+          {renderZones()}
+        </div>
+        {/* <div className="add">
             <IC_add color="aquamarine" width={36} height={36} />
           </div> */}
-        </div>
-        <div className="toolbar"> <IC_menu width="48px" height="48px" color="#fff" onClick={() => setMenu(true)} /></div>
-        <main>
-          <section className="section-table">
-            <RenderTable originalData={data} />
-          </section>
-          {renderChartsOfZones()}
-          {renderStackChart()}
-        </main>
-        
-        <div className={"drawer-background-canvas" + (menu ? " background-canvas-on" : " background-canvas-close")} onClick={() => setMenu(false)}></div>
       </div>
-    </>
+      <div className="toolbar"> <IC_menu width="48px" height="48px" color="#fff" onClick={() => setMenu(true)} /></div>
+      <main>
+        <section className="section-table">
+          <RenderTable originalData={data} />
+        </section>
+        {renderChartsOfZones()}
+        {renderStackChart()}
+      </main>
+
+      <div className={"drawer-background-canvas" + (menu ? " background-canvas-on" : " background-canvas-close")} onClick={() => setMenu(false)}></div>
+    </div>
   )
 }
 

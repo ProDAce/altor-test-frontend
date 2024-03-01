@@ -1,17 +1,18 @@
-/* :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+:root {
+  font-family: sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  /* color: whitesmoke; */
 
-  color-scheme: light dark;
+  /* color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-} */
+}
 
 /* 
 a {
@@ -85,13 +86,51 @@ html {
   /* font-size: 18px; */
 }
 
-:root {
+/* :root {
   --color-primary: #1C1856;
-  --color-primary-light: #4b4968;
   --color-secondary: aquamarine;
-  --color-secondary-light: #edfdf7;
-  --color-border: rgb(182, 182, 182);
+  --color-bg: #cfe2f1;
+  --color-section: white;
+  --color-table-head: #F8F1FD;
+  --color-table-alternate: #fcf8ff;
+  --color-border: #e1e1e1;
   --border-radius: 8px;
+} */
+
+/* :root {
+  --color-primary: #1c232d;
+  --color-secondary: aquamarine;
+  --color-bg: #161b21;
+  --color-section: #1c232d;
+  --color-table-head: #071222;
+  --color-table-alternate: #151e2a;
+  --color-border: #e1e1e1;
+  --border-radius: 8px;
+} */
+#light {
+  color: #161616;
+  --color-primary: #1C1856;
+  --color-secondary: aquamarine;
+  --color-bg: #cfe2f1;
+  --color-section: white;
+  --color-table-head: #F8F1FD;
+  --color-table-alternate: #fcf8ff;
+  --color-border: #e1e1e1;
+  --border-radius: 8px;
+  --color-shadow: grey;
+}
+
+#dark {
+  color: whitesmoke;
+  --color-primary: #1c232d;
+  --color-secondary: aquamarine;
+  --color-bg: #161b21;
+  --color-section: #1c232d;
+  --color-table-head: #071222;
+  --color-table-alternate: #151e2a;
+  --color-border: #e1e1e1;
+  --border-radius: 8px;
+  --color-shadow: #2e3444;
 }
 
 html,
@@ -99,8 +138,8 @@ body {
   min-height: 100vh;
 }
 
-.chart-c .recharts-legend-wrapper{
+.chart-c .recharts-legend-wrapper {
   bottom: 30% !important;
-  max-width: 90% !important; 
+  max-width: 90% !important;
   margin: 0px auto !important;
 }

@@ -9,10 +9,11 @@ function RenderTable({ originalData }) {
     const [currentData, setCurrentData] = useState([]);
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState("");
-    const [items, setItems] = useState(50);
+    const [items, setItems] = useState(20);
     const [filterList, setFilterList] = useState({})
     const [openFilter, setOpenFilter] = useState("");
     const [filter, setFilter] = useState({});
+    const [showCsv, setShowCsv] = useState(false);
 
 
 
@@ -44,12 +45,19 @@ function RenderTable({ originalData }) {
             }
 
             const f2 = {
-                zone: [...zSet].sort(),
-                device_brand: [...dbSet].sort(),
-                sdk_int: [...sdkSet].sort(),
-                vehicle_brand: [...vbSet].sort(),
-                vehicle_cc: [...vccSet].sort(),
+                zone: [],
+                device_brand: [],
+                sdk_int: [],
+                vehicle_brand: [],
+                vehicle_cc: [],
             }
+            // const f2 = {
+            //     zone: [...zSet].sort(),
+            //     device_brand: [...dbSet].sort(),
+            //     sdk_int: [...sdkSet].sort(),
+            //     vehicle_brand: [...vbSet].sort(),
+            //     vehicle_cc: [...vccSet].sort(),
+            // }
 
             setFilterList({ ...f });
             setFilter({ ...f2 })
@@ -58,9 +66,9 @@ function RenderTable({ originalData }) {
     }, [originalData])
 
     useEffect(() => {
-        if (data.length > 0) {
-            setPage(0);
-        }
+        // if (data.length > 0) {
+        setPage(0);
+        // } else
     }, [data])
 
     useEffect(() => {
@@ -90,25 +98,31 @@ function RenderTable({ originalData }) {
         }
     }
 
-    const sliceData = (s = false) => {
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+        sliceData(e.target.value);
+    }
+
+    const sliceData = (s = "") => {
         let arr = []
         for (let i = 0; i < originalData.length; i++) {
             let o = originalData[i];
             if (
-                filter["zone"].includes(o["zone"]) &&
-                filter["device_brand"].includes(o["device_brand"]) &&
-                filter["sdk_int"].includes(o["sdk_int"]) &&
-                filter["vehicle_brand"].includes(o["vehicle_brand"]) &&
-                filter["vehicle_cc"].includes(o["vehicle_cc"]) &&
-                ((search.length > 0 && o["username"].includes(String(search)) ||
+                (filter["zone"].length === 0 || filter["zone"].includes(o["zone"])) &&
+                (filter["device_brand"].length === 0 || filter["device_brand"].includes(o["device_brand"])) &&
+                (filter["sdk_int"].length === 0 || filter["sdk_int"].includes(o["sdk_int"])) &&
+                (filter["vehicle_brand"].length === 0 || filter["vehicle_brand"].includes(o["vehicle_brand"])) &&
+                (filter["vehicle_cc"].length === 0 || filter["vehicle_cc"].includes(o["vehicle_cc"])) &&
+                ((search.length > 0 && o["username"].includes(String(s)) ||
                     search.length == 0))
             ) {
                 arr.push(o);
             }
         }
-        if (s) {
-            setSearch("");
-        }
+        // if (s) {
+        //     setSearch("");
+        // }
+        console.log(arr);
         setData(arr);
     }
 
@@ -212,7 +226,9 @@ function RenderTable({ originalData }) {
                         <input id={`${v} + ${obj}`} type="checkbox" checked={filter[v].includes(obj)} onChange={(e) => {
                             setOpenFilter("")
                             handleFilter(e.target.checked, v, obj)
-                        }} /><label htmlFor={`${v} + ${obj}`}>{obj}</label>
+                        }} /><label htmlFor={`${v} + ${obj}`}>
+
+                            {obj}</label>
                     </li >)
             })
 
@@ -235,55 +251,54 @@ function RenderTable({ originalData }) {
             <thead>
                 <tr>
                     <th>
-                        <div className="th-div">username</div>
+                        <div className="th-div">Username</div>
                     </th>
-                    <th>
+                    <th style={{ position: "relative" }}>
+                        {renderDropDown("zone")}
                         <div className="th-div">
-                            zone
-
+                            Zone
                             <div className="icons-div" style={{ marginLeft: "8px" }}>
                                 <IC_filter height={16} width={16} onClick={() => handleOpenFilter("zone")} />
-                                {renderDropDown("zone")}
                             </div>
                         </div>
 
                     </th>
-                    <th>
+                    <th style={{ position: "relative" }}>
+                        {renderDropDown("device_brand")}
                         <div className="th-div">
-                            device_brand
+                            Device Brand
                             <div className="icons-div" style={{ marginLeft: "8px" }}>
                                 <IC_filter height={16} width={16} onClick={() => handleOpenFilter("device_brand")} />
-                                {renderDropDown("device_brand")}
                             </div>
                         </div>
 
                     </th>
-                    <th>
+                    <th style={{ position: "relative" }}>
+                        {renderDropDown("sdk_int")}
                         <div className="th-div">
-                            sdk_int
+                            SDK INT
                             <div className="icons-div" style={{ marginLeft: "8px" }}>
                                 <IC_filter height={16} width={16} onClick={() => handleOpenFilter("sdk_int")} />
-                                {renderDropDown("sdk_int")}
                             </div>
                         </div>
 
                     </th>
-                    <th>
+                    <th style={{ position: "relative" }}>
+                        {renderDropDown("vehicle_brand")}
                         <div className="th-div">
-                            vehicle_brand
+                            Vehicle Brand
                             <div className="icons-div" style={{ marginLeft: "8px" }}>
                                 <IC_filter height={16} width={16} onClick={() => handleOpenFilter("vehicle_brand")} />
-                                {renderDropDown("vehicle_brand")}
                             </div>
                         </div>
 
                     </th>
-                    <th>
+                    <th style={{ position: "relative" }}>
+                        {renderDropDown("vehicle_cc")}
                         <div className="th-div">
-                            vehicle_cc
+                            Vehicle CC
                             <div className="icons-div" style={{ marginLeft: "8px" }}>
                                 <IC_filter height={16} width={16} onClick={() => handleOpenFilter("vehicle_cc")} />
-                                {renderDropDown("vehicle_cc")}
                             </div>
                         </div>
 
@@ -294,32 +309,61 @@ function RenderTable({ originalData }) {
         // }
 
     }
+
     const renderRows = () => {
+
+        let rd = currentData?.map((obj, index) => {
+            return (
+                <tr key={index}>
+                    <td>{obj.username}</td>
+                    <td>{obj.zone}</td>
+                    <td>{obj.device_brand}</td>
+                    <td>{obj.sdk_int}</td>
+                    <td>{obj.vehicle_brand}</td>
+                    <td>{obj.vehicle_cc}</td>
+                </tr>
+            )
+        })
+        while (rd.length < 10) {
+            rd.push(
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+            )
+        }
         return (
             <tbody>
-                {
-                    currentData?.map((obj, index) => {
-                        return (
-                            <tr key={index}>
-                                <td>{obj.username}</td>
-                                <td>{obj.zone} <span></span></td>
-                                <td>{obj.device_brand}</td>
-                                <td>{obj.sdk_int}</td>
-                                <td>{obj.vehicle_brand}</td>
-                                <td>{obj.vehicle_cc}</td>
-                            </tr>
-                        )
-                    })
+                {rd
+                    // currentData?.map((obj, index) => {
+                    //     return (
+                    //         <tr key={index}>
+                    //             <td>{obj.username}</td>
+                    //             <td>{obj.zone} <span></span></td>
+                    //             <td>{obj.device_brand}</td>
+                    //             <td>{obj.sdk_int}</td>
+                    //             <td>{obj.vehicle_brand}</td>
+                    //             <td>{obj.vehicle_cc}</td>
+                    //         </tr>
+                    //     )
+                    // })
                 }
             </tbody>
         )
+
+
     }
+
     return (
         <>
             <div className="search">
                 <label htmlFor="search">Search: </label>
-                <input id="search" type="text" placeholder="Search by name" value={search} onChange={(e) => { setSearch(e.target.value) }} />
-                <button onClick={() => sliceData(true)}>Search</button>
+                <input id="search" type="text" placeholder="Search by name" value={search} onChange={(e) => { handleSearch(e) }} />
+                {/* <button onClick={() => sliceData(true)}>Search</button> */}
             </div>
             <div className="table-div">
 
@@ -341,11 +385,18 @@ function RenderTable({ originalData }) {
                     }
                 }} />
             </div>
-            <div className="csv">
-                <CSVLink data={downloadCSV(1)}><button>Download Original Data</button></CSVLink>
-                <CSVLink data={downloadCSV(2)}><button >Download Filtered Data</button></CSVLink>
-                <CSVLink data={downloadCSV(3)}><button >Download current {currentData.length} Data</button></CSVLink>
+            <div className="csv-div">
+                <button onClick={()=>{setShowCsv((curr)=>!curr)}}>Download CSV</button>
+                <div className={`csv ${showCsv?"csv-show":""}`}>
+                    <CSVLink data={downloadCSV(1)}>Download Original Data</CSVLink>
+                    <CSVLink data={downloadCSV(2)}>Download Filtered Data</CSVLink>
+                    <CSVLink data={downloadCSV(3)}>Download current {currentData.length} Data</CSVLink>
+                    {/* <CSVLink data={downloadCSV(1)}><button>Download Original Data</button></CSVLink>
+                    <CSVLink data={downloadCSV(2)}><button >Download Filtered Data</button></CSVLink>
+                    <CSVLink data={downloadCSV(3)}><button >Download current {currentData.length} Data</button></CSVLink> */}
+                </div>
             </div>
+
         </>
     );
 }
